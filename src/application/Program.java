@@ -1,10 +1,57 @@
-package application;
+package application;//"" ''
+
+import java.util.Date;
+import java.util.List;
+import java.util.Scanner;
+
+import model.dao.DaoFactory;
+import model.dao.SellerDao;
+import model.entities.Department;
+import model.entities.Seller;
 
 public class Program {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		
+		Scanner sc = new Scanner(System.in);
 
-	}
+		SellerDao sellerDao = DaoFactory.crateSellerDao();
+	
+		System.out.println("=== TEST 1: seller findById =====");
+		Seller seller = sellerDao.findById(3);
+		System.out.println(seller);
+		
+		System.out.println("\n=== TEST 2: seller findByDepartmentId =====");
+		Department department = new Department(2, null);
+		List<Seller> list = sellerDao.findByDepartment(department);
+		for(Seller slr : list) {
+			System.out.println(slr);
+		}
+		
+		System.out.println("\n=== TEST 3: seller findAll =====");
+	    list = sellerDao.findAll();
+		for(Seller slr : list) {
+			System.out.println(slr);
+		}
+		
+		System.out.println("\n=== TEST 4: seller insert =====");
+		Seller newSeller = new Seller(null, "Greg", "Greg@gmail.com", new Date(), 4000.0, department);
+		sellerDao.insert(newSeller);
+		System.out.println("Inserted! new Id = " + newSeller.getId());
+		
+		System.out.println("\n=== TEST 5: seller Update =====");
+		seller = sellerDao.findById(1);// seleciona o vendedor do id 1
+		seller.setName("Martha waine");	// novo nome
+		sellerDao.upDate(seller);//salva a atualização
+		System.out.println("atualização concluida");
+		
+		System.out.println("\n=== TEST 6: seller Delete =====");
+		System.out.print("Entre com um id pra deletar: ");
+		int id = sc.nextInt();
+		sellerDao.deleteById(id);
+		System.out.println("Delete concluido");
+		
+		sc.close();
+		}
 
 }
